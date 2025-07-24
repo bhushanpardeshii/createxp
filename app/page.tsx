@@ -1,50 +1,59 @@
 "use client";
-import ClientTable from "./ClientTable";
-import SortPanel from "./SortPanel";
-import { useClientSort } from "./useClientSort";
-import { mockClients } from "./mockClients";
-import SortPopover from "./SortPopover";
+import { useState } from "react";
 import { Button } from "../components/ui/button";
-import { Search, Filter,ArrowDownUp, Plus } from "lucide-react";
-import { useState, useRef } from "react";
+import { Search, ArrowDownUp, Filter, Plus } from "lucide-react";
+
+// Components
+import ClientTable from "../components/table/ClientTable";
+import SortPanel from "../components/sort/SortPanel";
+
+// Hooks and Utils
+import { useClientSort } from "../hooks/useClientSort";
+import { mockClients } from "../utils/mockClients";
 
 export default function Home() {
   const { sort, setSort, appliedSort, applySort, clearSort, multiSort } = useClientSort();
   const sortedClients = multiSort(mockClients);
   const [sortPopoverOpen, setSortPopoverOpen] = useState(false);
-  const sortButtonRef = useRef<HTMLButtonElement>(null);
+  // Remove popoverStyle, positioned, useLayoutEffect, and sortButtonRef
 
   return (
     <div className="p-8">
-      <div className="flex items- border-b justify-between pb-6 mb-6">
+      <div className="flex items-center border-b pb-4 justify-between mb-6">
         <h1 className="text-2xl font-bold">Clients</h1>
       </div>
-      {/* Button group and actions */}
-      <div className="flex items-center gap-2 mb-4">
-        <div className="flex gap-1 rounded-md p-1">
-          <Button variant="secondary" size="sm" className="font-semibold">All</Button>
-          <Button variant="ghost" size="sm" className="font-semibold">Individual</Button>
-          <Button variant="ghost" size="sm" className="font-semibold">Company</Button>
+      {/* Button group and actions with popover wrapper */}
+      <div className="relative flex items-center mb-1">
+        <div className="flex gap-1  rounded-md p-1">
+          <Button variant="ghost" size="sm" className="font-bold ">All</Button>
+          <Button variant="ghost" size="sm" className="font-semibold text-gray-600">Individual</Button>
+          <Button variant="ghost" size="sm" className="font-semibold text-gray-600">Company</Button>
         </div>
         <div className="flex-1" />
         <Button variant="ghost" size="icon" className="ml-2"><Search className="w-5 h-5" /></Button>
-        <Button ref={sortButtonRef}
+        <Button
           variant="ghost"
           size="icon"
-          onClick={() => setSortPopoverOpen((v) => !v)} className="ml-2"><ArrowDownUp className="w-5 h-5" /></Button>
-        <Button
-         variant="ghost"
-          size="icon"
+          onClick={() => setSortPopoverOpen((v) => !v)}
+          className="ml-2"
         >
-          <Filter className="w-5 h-5" />
+          <ArrowDownUp className="w-5 h-5" />
+          <div className="relative">  
+            {sort.length > 0 && (
+              <div className="absolute -top-5 -right-2 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-semibold">
+                {sort.length}
+              </div>
+            )}
+          </div>
         </Button>
-        
-        <Button  variant="default" className="px-4 py-2 font-semibold text-base flex items-center gap-2"><Plus className="w-4 h-4" />Add Client</Button>
+        <Button variant="ghost" size="icon" className="ml-2"><Filter className="w-5 h-5" /></Button>
+        <Button variant="default" className="px-4 py-2 font-semibold text-base flex items-center gap-2">
+          <Plus className="w-4 h-4" />Add Client
+        </Button>
         {/* Popover for sorting */}
         {sortPopoverOpen && (
           <div
-            style={{ position: 'absolute', right:210, top: 150, zIndex: 50 }}
-            className="min-w-[680px] max-w-lg bg-white rounded-xl p-0 shadow-lg border"
+            className="absolute right-45 top-8 mt-2 min-w-[680px] max-w-lg bg-white rounded-xl p-0 shadow-lg border z-50"
           >
             <SortPanel
               sort={sort}

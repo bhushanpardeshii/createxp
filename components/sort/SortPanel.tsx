@@ -2,8 +2,8 @@
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { X, User, Calendar, GripVertical, SquareUser, ArrowUp, ArrowDown } from "lucide-react";
-import { SORT_FIELDS, SortField } from "./useClientSort";
+import { X, User, Calendar, Hash, GripVertical, SquareUser, ArrowUp, ArrowDown } from "lucide-react";
+import { SORT_FIELDS, SortField } from "../../hooks/useClientSort";
 import React from "react";
 
 function getIcon(field: string) {
@@ -14,7 +14,7 @@ function getIcon(field: string) {
     case "updatedAt":
       return <Calendar size={16} className="mr-1" />;
     case "id":
-      return <SquareUser size={16} className="mr-1" />;
+      return <Hash size={16} className="mr-1" />;
     default:
       return null;
   }
@@ -53,19 +53,19 @@ function SortableItem({ s, label, onToggle, onRemove }: any) {
       <span className="flex-1 font-medium">{label}</span>
       <button
         onClick={() => onToggle(s.field, "asc")}
-        className={`px-2 py-1 rounded text-xs font-semibold ${s.direction === "asc" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"}`}
+        className={`px-2 py-1 cursor-pointer rounded text-xs font-semibold ${s.direction === "asc" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"}`}
       >
         <ArrowUp className="inline w-4 h-4 mr-1" />
         {s.field.includes("At") ? "Newest to Oldest" : "A-Z"}
       </button>
       <button
         onClick={() => onToggle(s.field, "desc")}
-        className={`px-2 py-1 rounded text-xs font-semibold ml-1 ${s.direction === "desc" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"}`}
+        className={`px-2 py-1 cursor-pointer rounded text-xs font-semibold ml-1 ${s.direction === "desc" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"}`}
       >
         <ArrowDown className="inline w-4 h-4 mr-1" />
         {s.field.includes("At") ? "Oldest to Newest" : "Z-A"}
       </button>
-      <button onClick={() => onRemove(s.field)} className="ml-2 p-1 text-gray-400 hover:text-red-500" title="Remove">
+      <button onClick={() => onRemove(s.field)} className="ml-2 p-1 cursor-pointer text-gray-400 hover:text-red-500" title="Remove">
         <X size={16} />
       </button>
     </div>
@@ -115,7 +115,7 @@ export default function SortPanel({ sort, setSort, applySort, clearSort, applied
   }
 
   return (
-    <div className="w-full bg-white rounded-xl p-6 shadow-lg border flex flex-col gap-4">
+    <div className="w-full bg-white rounded-xl p-6 shadow-lg  flex flex-col gap-4">
       <div className="font-semibold text-lg mb-2">Sort By</div>
       <DndContext
         sensors={sensors}
@@ -146,16 +146,16 @@ export default function SortPanel({ sort, setSort, applySort, clearSort, applied
               <span className="flex-1 text-gray-500">{f.label}</span>
               <button
                 onClick={() => handleAdd(f.key, "asc")}
-                className="px-2 py-1 rounded text-xs font-semibold hover:bg-gray-100"
+                className="px-2 py-1 cursor-pointer rounded text-xs font-semibold hover:bg-gray-100"
               >
-                 <ArrowUp className="inline w-4 h-4 mr-1" />
+                <ArrowUp className="inline w-4 h-4 mr-1" />
                 {f.key.includes("At") ? "Newest to Oldest" : "A-Z"}
               </button>
               <button
                 onClick={() => handleAdd(f.key, "desc")}
-                className="px-2 py-1 rounded text-xs font-semibold hover:bg-gray-100 ml-1"
+                className="px-2 py-1 cursor-pointer rounded text-xs font-semibold hover:bg-gray-100 ml-1"
               >
-                 <ArrowDown className="inline w-4 h-4 mr-1" />
+                <ArrowDown className="inline w-4 h-4 mr-1" />
                 {f.key.includes("At") ? "Oldest to Newest" : "Z-A"}
               </button>
             </div>
@@ -164,14 +164,14 @@ export default function SortPanel({ sort, setSort, applySort, clearSort, applied
       )}
       <div className="flex items-center justify-between mt-4">
         <button
-          className="text-gray-500 hover:underline text-sm"
+          className="text-gray-500 cursor-pointer hover:underline text-sm"
           onClick={clearSort}
           disabled={sort.length === 0}
         >
           Clear all
         </button>
         <button
-          className="px-4 py-2 bg-black text-white rounded font-semibold hover:bg-gray-800"
+          className="px-4 py-2 cursor-pointer bg-black text-white rounded font-semibold hover:bg-gray-800"
           onClick={applySort}
           disabled={JSON.stringify(sort) === JSON.stringify(appliedSort)}
         >

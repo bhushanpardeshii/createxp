@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Filter } from "lucide-react";
 import SortPanel from "./SortPanel";
-import { Button } from "../components/ui/button";
+import { Button } from "../../components/ui/button";
 
 export default function SortPopover(props: any) {
   const [open, setOpen] = useState(false);
@@ -39,7 +39,7 @@ export default function SortPopover(props: any) {
       {open && (
         <div
           ref={popoverRef}
-          className="absolute right-0 mt-2 z-50 min-w-[680px] max-w-lg bg-white rounded-xl  shadow-lg "
+          className="absolute right-0 mt-2 z-50 min-w-[680px] max-w-lg bg-white rounded-xl shadow-lg"
         >
           <SortPanel {...props} />
         </div>
